@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oráculo da Deusa Hatsune Miku - Comentários e Detalhes</title>
+    <title>Oráculo da Deusa Hatsune Miku - Versão Completa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://unpkg.com/htmx.org@1.9.10" integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <style>
         * {
             margin: 0;
@@ -42,7 +42,503 @@
             min-height: 100vh;
         }
 
-        /* Modal de Detalhes da Carta */
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--cor-destaque) 0%, #b28fce 100%);
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid var(--cor-copas);
+        }
+
+        header::before {
+            content: "🎴 🎶 🎭 🎵";
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            font-size: 2.8rem;
+            opacity: 0.2;
+            letter-spacing: 25px;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .subtitulo {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Cards de Tiragem */
+        .tiragens-temporais {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 25px;
+            box-shadow: var(--sombra-suave);
+            margin-bottom: 2.5rem;
+            border: 2px solid #f0e0ff;
+        }
+
+        .tiragens-temporais h2 {
+            color: var(--cor-destaque);
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.8rem;
+        }
+
+        .tiragens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 2rem;
+        }
+
+        .tiragem-card {
+            background: linear-gradient(145deg, #fdf7ff 0%, #f9eeff 100%);
+            border-radius: 20px;
+            padding: 1.8rem;
+            box-shadow: var(--sombra-suave);
+            border-left: 6px solid;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tiragem-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--sombra-forte);
+        }
+
+        .tiragem-card.momento { border-left-color: var(--cor-paus); }
+        .tiragem-card.dia { border-left-color: var(--cor-copas); }
+        .tiragem-card.semana { border-left-color: var(--cor-ouros); }
+        .tiragem-card.mes { border-left-color: var(--cor-espadas); }
+
+        .tiragem-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.2rem;
+        }
+
+        .tiragem-titulo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--cor-destaque);
+        }
+
+        .tiragem-emoji {
+            font-size: 1.8rem;
+        }
+
+        .tiragem-info {
+            color: var(--cor-texto-claro);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .btn-tiragem {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-tiragem:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-tiragem:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background-color: var(--cor-disabled) !important;
+        }
+
+        .btn-momento { background: linear-gradient(135deg, var(--cor-paus) 0%, #4caF7f 100%); color: white; }
+        .btn-dia { background: linear-gradient(135deg, var(--cor-copas) 0%, #ff4d8d 100%); color: white; }
+        .btn-semana { background: linear-gradient(135deg, var(--cor-ouros) 0%, #ffaa00 100%); color: white; }
+        .btn-mes { background: linear-gradient(135deg, var(--cor-espadas) 0%, #6a5bff 100%); color: white; }
+
+        .cooldown-info {
+            background: rgba(255,255,255,0.8);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .cooldown-timer {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--cor-destaque);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .cooldown-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .cooldown-btn {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #d9b8ff;
+            background: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .cooldown-btn.active {
+            background: var(--cor-destaque);
+            color: white;
+            border-color: var(--cor-destaque);
+        }
+
+        .cooldown-btn:hover:not(.active) {
+            background: #f5eeff;
+        }
+
+        /* Resultados */
+        .resultados-tiragem {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 25px;
+            box-shadow: var(--sombra-suave);
+            margin-bottom: 2.5rem;
+            border: 2px solid #f0e0ff;
+            display: none;
+        }
+
+        .resultados-tiragem.ativo {
+            display: block;
+            animation: aparecer 0.8s ease;
+        }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .resultados-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0e0ff;
+        }
+
+        .resultados-titulo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--cor-destaque);
+            font-size: 1.6rem;
+        }
+
+        .btn-revelar-todas {
+            padding: 10px 20px;
+            background: var(--cor-destaque);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-revelar-todas:hover {
+            background: #3a1a4d;
+            transform: scale(1.05);
+        }
+
+        .cartas-resultado-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 1.5rem;
+            min-height: 300px;
+        }
+
+        /* Cartas */
+        .carta-resultado {
+            width: 140px;
+            height: 210px;
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .carta-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .carta-resultado.virada .carta-inner {
+            transform: rotateY(180deg);
+        }
+
+        .carta-frente, .carta-verso {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .carta-verso {
+            background: linear-gradient(135deg, var(--cor-destaque) 0%, #8a7cff 100%);
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .carta-verso.momento { background: linear-gradient(135deg, var(--cor-paus) 0%, #4caF7f 100%); }
+        .carta-verso.dia { background: linear-gradient(135deg, var(--cor-copas) 0%, #ff4d8d 100%); }
+        .carta-verso.semana { background: linear-gradient(135deg, var(--cor-ouros) 0%, #ffaa00 100%); }
+        .carta-verso.mes { background: linear-gradient(135deg, var(--cor-espadas) 0%, #6a5bff 100%); }
+
+        .carta-frente {
+            background: white;
+            transform: rotateY(180deg);
+        }
+
+        .carta-frente .naipe-icone {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .carta-numero {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: white;
+            color: var(--cor-destaque);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .carta-tipo-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .letra-badge { color: var(--cor-copas); border: 1px solid var(--cor-copas); }
+        .numero-badge { color: var(--cor-espadas); border: 1px solid var(--cor-espadas); }
+        .aleatoria-badge { color: var(--cor-paus); border: 1px solid var(--cor-paus); }
+
+        .carta-titulo {
+            font-weight: bold;
+            color: var(--cor-destaque);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .carta-desc {
+            font-size: 0.8rem;
+            color: var(--cor-texto-claro);
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        .badge-clicavel {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--cor-destaque);
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            z-index: 10;
+            pointer-events: none;
+            border: 1px solid var(--cor-copas);
+        }
+
+        .revelacao-progresso {
+            width: 100%;
+            height: 8px;
+            background: #f0e0ff;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .revelacao-progresso.ativo {
+            display: block;
+        }
+
+        .revelacao-barra {
+            height: 100%;
+            background: linear-gradient(90deg, var(--cor-copas), var(--cor-espadas));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .mensagem-suspense {
+            text-align: center;
+            font-style: italic;
+            color: var(--cor-destaque);
+            margin: 20px 0;
+            min-height: 30px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Baralhos Salvos */
+        .baralhos-salvos {
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: var(--sombra-suave);
+            margin-bottom: 2.5rem;
+        }
+
+        .baralhos-salvos h3 {
+            color: var(--cor-destaque);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .baralhos-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .baralho-salvo-item {
+            background: #f9f5ff;
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 5px solid;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .baralho-salvo-item:hover {
+            transform: translateX(5px);
+            background: #f0e0ff;
+        }
+
+        .baralho-salvo-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .baralho-salvo-tipo {
+            font-weight: bold;
+            color: var(--cor-destaque);
+            font-size: 1.1rem;
+        }
+
+        .baralho-salvo-data {
+            font-size: 0.9rem;
+            color: var(--cor-texto-claro);
+        }
+
+        .baralho-salvo-cartas {
+            display: flex;
+            gap: 5px;
+        }
+
+        .baralho-salvo-carta-mini {
+            width: 25px;
+            height: 35px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Modal de Detalhes */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -319,181 +815,51 @@
             font-style: italic;
         }
 
-        /* Indicador de carregamento HTMX */
-        .htmx-indicator {
-            display: none;
+        /* Animações */
+        @keyframes brilho {
+            0% { box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            50% { box-shadow: 0 0 25px rgba(255,255,255,0.9); }
+            100% { box-shadow: 0 0 10px rgba(255,255,255,0.5); }
         }
 
-        .htmx-request .htmx-indicator {
-            display: inline-block;
+        .carta-revelando {
+            animation: brilho 1.5s infinite;
         }
 
-        .htmx-request.btn-enviar-comentario .texto-btn {
-            display: none;
+        .piscar {
+            animation: piscar 0.8s infinite;
         }
 
-        /* Badges nas cartas para indicar que são clicáveis */
-        .carta-resultado {
-            position: relative;
+        @keyframes piscar {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
-        .badge-clicavel {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--cor-destaque);
-            padding: 4px 8px;
-            border-radius: 10px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            z-index: 10;
-            pointer-events: none;
-            border: 1px solid var(--cor-copas);
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .tiragens-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tiragem-card {
+                padding: 1.5rem;
+            }
+            
+            .cartas-resultado-container {
+                gap: 15px;
+            }
+            
+            .carta-resultado {
+                width: 120px;
+                height: 180px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
         }
 
-        /* Estilos existentes (mantidos do código anterior) */
-        header {
-            background: linear-gradient(135deg, var(--cor-destaque) 0%, #b28fce 100%);
-            color: white;
-            text-align: center;
-            padding: 2.5rem 1rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-            border-bottom: 5px solid var(--cor-copas);
-        }
-
-        header::before {
-            content: "🎴 🎶 🎭 🎵";
-            position: absolute;
-            top: 15px;
-            left: 0;
-            right: 0;
-            font-size: 2.8rem;
-            opacity: 0.2;
-            letter-spacing: 25px;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 2;
-        }
-
-        .subtitulo {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .tiragens-temporais, .resultados-tiragem, .baralhos-salvos {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 25px;
-            box-shadow: var(--sombra-suave);
-            margin-bottom: 2.5rem;
-            border: 2px solid #f0e0ff;
-        }
-
-        /* Outros estilos permanecem como no código anterior */
-        /* [Todos os outros estilos do código anterior são mantidos aqui] */
-        
-        /* Adicionando apenas alguns essenciais para exemplo */
-        .carta-resultado {
-            width: 140px;
-            height: 210px;
-            perspective: 1000px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .carta-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .carta-frente, .carta-verso {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-
-        .carta-verso {
-            background: linear-gradient(135deg, var(--cor-destaque) 0%, #8a7cff 100%);
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-        }
-
-        .carta-frente {
-            background: white;
-            transform: rotateY(180deg);
-        }
-
-        .carta-numero {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: white;
-            color: var(--cor-destaque);
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .carta-titulo {
-            font-weight: bold;
-            color: var(--cor-destaque);
-            margin-bottom: 5px;
-            font-size: 1.1rem;
-            text-align: center;
-        }
-
-        .carta-desc {
-            font-size: 0.8rem;
-            color: var(--cor-texto-claro);
-            line-height: 1.3;
-            text-align: center;
-        }
-
-        .naipe-icone {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
+        /* Cores dos naipes */
         .copas { color: var(--cor-copas); }
         .ouros { color: var(--cor-ouros); }
         .paus { color: var(--cor-paus); }
@@ -503,14 +869,14 @@
 <body>
     <header>
         <h1><i class="fas fa-crystal-ball"></i> Oráculo da Deusa Hatsune Miku</h1>
-        <p class="subtitulo">Sistema de Tiragens Temporais com Comentários ✨ | Clique nas cartas para detalhes! 🔍</p>
+        <p class="subtitulo">✨ Sistema completo de tiragens temporais com cooldown, detalhes das cartas e comentários! 🔮</p>
     </header>
 
     <main class="container">
-        <!-- Seção de Tiragens Temporais (mesma do código anterior) -->
+        <!-- Seção de Tiragens Temporais -->
         <section class="tiragens-temporais">
             <h2><i class="fas fa-clock"></i> Tiragens do Destino Temporal 🎴</h2>
-            <p style="margin-bottom: 1.5rem; color: var(--cor-texto-claro);">Cada tiragem tem seu próprio ciclo e sabedoria. Clique nas cartas para ver detalhes! 🔮</p>
+            <p style="margin-bottom: 1.5rem; color: var(--cor-texto-claro);">💡 <strong>Dica:</strong> Após revelar as cartas, clique em qualquer uma para ver detalhes completos e adicionar comentários!</p>
             
             <div class="tiragens-grid">
                 <!-- Momento (1 hora) -->
@@ -523,7 +889,7 @@
                         <span class="cooldown-timer" id="cooldown-momento">--:--</span>
                     </div>
                     <div class="tiragem-info">
-                        <p>🎯 <strong>1 carta aleatória</strong> do baralho completo. Clique na carta para ver detalhes! 🌟</p>
+                        <p>🎯 <strong>1 carta aleatória</strong> do baralho completo. Perfeita para uma orientação rápida sobre o agora! 🌟</p>
                         <p style="margin-top: 8px; font-size: 0.85rem;"><i class="fas fa-sync-alt"></i> Cooldown: <strong>1 hora</strong></p>
                     </div>
                     <button class="btn-tiragem btn-momento" id="btn-momento" data-tipo="momento" data-cooldown="1">
@@ -538,8 +904,80 @@
                     </div>
                 </div>
 
-                <!-- Outros cards de tiragem (Dia, Semana, Mês) -->
-                <!-- [Conteúdo idêntico ao código anterior] -->
+                <!-- Dia -->
+                <div class="tiragem-card dia">
+                    <div class="tiragem-header">
+                        <div class="tiragem-titulo">
+                            <span class="tiragem-emoji">🌞</span>
+                            <span>Sorte do Dia</span>
+                        </div>
+                        <span class="cooldown-timer" id="cooldown-dia">--:--</span>
+                    </div>
+                    <div class="tiragem-info">
+                        <p>🔮 <strong>1 carta Letra (Copas)</strong> + <strong>3 cartas aleatórias</strong>. Revele o que o dia reserva para você! ☀️</p>
+                        <p style="margin-top: 8px; font-size: 0.85rem;"><i class="fas fa-sync-alt"></i> Cooldown: <strong>24 horas</strong></p>
+                    </div>
+                    <button class="btn-tiragem btn-dia" id="btn-dia" data-tipo="dia" data-cooldown="24">
+                        <i class="fas fa-sun"></i> Consultar o Dia
+                    </button>
+                    <div class="cooldown-info">
+                        <div class="cooldown-options">
+                            <button class="cooldown-btn active" data-tipo="dia" data-visualizacao="tempo">⏳ Tempo Restante</button>
+                            <button class="cooldown-btn" data-tipo="dia" data-visualizacao="proxima">🕒 Próxima às</button>
+                            <button class="cooldown-btn" data-tipo="dia" data-visualizacao="nenhum">🎴 Sem Contador</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Semana -->
+                <div class="tiragem-card semana">
+                    <div class="tiragem-header">
+                        <div class="tiragem-titulo">
+                            <span class="tiragem-emoji">📅</span>
+                            <span>Sorte da Semana</span>
+                        </div>
+                        <span class="cooldown-timer" id="cooldown-semana">--:--</span>
+                    </div>
+                    <div class="tiragem-info">
+                        <p>🌈 <strong>3 cartas Letra (Copas)</strong> + <strong>6 cartas aleatórias</strong>. Uma visão ampla dos próximos 7 dias! 📆</p>
+                        <p style="margin-top: 8px; font-size: 0.85rem;"><i class="fas fa-sync-alt"></i> Cooldown: <strong>7 dias</strong></p>
+                    </div>
+                    <button class="btn-tiragem btn-semana" id="btn-semana" data-tipo="semana" data-cooldown="168">
+                        <i class="fas fa-calendar-week"></i> Consultar a Semana
+                    </button>
+                    <div class="cooldown-info">
+                        <div class="cooldown-options">
+                            <button class="cooldown-btn active" data-tipo="semana" data-visualizacao="tempo">⏳ Tempo Restante</button>
+                            <button class="cooldown-btn" data-tipo="semana" data-visualizacao="proxima">🕒 Próxima às</button>
+                            <button class="cooldown-btn" data-tipo="semana" data-visualizacao="nenhum">🎴 Sem Contador</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mês -->
+                <div class="tiragem-card mes">
+                    <div class="tiragem-header">
+                        <div class="tiragem-titulo">
+                            <span class="tiragem-emoji">🌙</span>
+                            <span>Sorte do Mês</span>
+                        </div>
+                        <span class="cooldown-timer" id="cooldown-mes">--:--</span>
+                    </div>
+                    <div class="tiragem-info">
+                        <p>🌌 <strong>1 carta aleatória</strong> + <strong>3 cartas Letra</strong> + <strong>9 cartas Número</strong>. Uma jornada profunda pelo mês que vem! 🌠</p>
+                        <p style="margin-top: 8px; font-size: 0.85rem;"><i class="fas fa-sync-alt"></i> Cooldown: <strong>30 dias</strong></p>
+                    </div>
+                    <button class="btn-tiragem btn-mes" id="btn-mes" data-tipo="mes" data-cooldown="720">
+                        <i class="fas fa-moon"></i> Consultar o Mês
+                    </button>
+                    <div class="cooldown-info">
+                        <div class="cooldown-options">
+                            <button class="cooldown-btn active" data-tipo="mes" data-visualizacao="tempo">⏳ Tempo Restante</button>
+                            <button class="cooldown-btn" data-tipo="mes" data-visualizacao="proxima">🕒 Próxima às</button>
+                            <button class="cooldown-btn" data-tipo="mes" data-visualizacao="nenhum">🎴 Sem Contador</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -593,12 +1031,44 @@
     </div>
 
     <script>
-        // Sistema de dados das 52 cartas (mesmo do código anterior)
+        // ============================================
+        // SISTEMA PRINCIPAL DO ORÁCULO
+        // ============================================
+
+        // Dados das cartas
         const divinasMap = {
-            'copas': { nome: 'A Compositora (Copas)', corClasse: 'copas', icone: '♥', cor: '#ff6b9d', tipo: 'letra', desc: 'Representa emoções, criatividade, amor e intuição. O coração da música e das relações.' },
-            'ouros': { nome: 'A Idol (Ouros)', corClasse: 'ouros', icone: '♦', cor: '#ffcc00', tipo: 'pessoa', desc: 'Simboliza trabalho, manifestação, recursos e valor pessoal. O aspecto brilhante do palco.' },
-            'paus': { nome: 'A Pioneira (Paus)', corClasse: 'paus', icone: '♣', cor: '#6bcf7f', tipo: 'si', desc: 'Representa ação, vontade, crescimento e inspiração. A faísca inicial de qualquer projeto.' },
-            'espadas': { nome: 'A Programadora (Espadas)', corClasse: 'espadas', icone: '♠', cor: '#8a7cff', tipo: 'sobrio', desc: 'Simboliza intelecto, verdade, decisões e estrutura. O código por trás da voz.' }
+            'copas': { 
+                nome: 'A Compositora (Copas)', 
+                corClasse: 'copas', 
+                icone: '♥', 
+                cor: '#ff6b9d', 
+                tipo: 'letra', 
+                desc: 'Representa emoções, criatividade, amor e intuição. O coração da música e das relações.' 
+            },
+            'ouros': { 
+                nome: 'A Idol (Ouros)', 
+                corClasse: 'ouros', 
+                icone: '♦', 
+                cor: '#ffcc00', 
+                tipo: 'pessoa', 
+                desc: 'Simboliza trabalho, manifestação, recursos e valor pessoal. O aspecto brilhante do palco.' 
+            },
+            'paus': { 
+                nome: 'A Pioneira (Paus)', 
+                corClasse: 'paus', 
+                icone: '♣', 
+                cor: '#6bcf7f', 
+                tipo: 'si', 
+                desc: 'Representa ação, vontade, crescimento e inspiração. A faísca inicial de qualquer projeto.' 
+            },
+            'espadas': { 
+                nome: 'A Programadora (Espadas)', 
+                corClasse: 'espadas', 
+                icone: '♠', 
+                cor: '#8a7cff', 
+                tipo: 'sobrio', 
+                desc: 'Simboliza intelecto, verdade, decisões e estrutura. O código por trás da voz.' 
+            }
         };
 
         const acoesMap = {
@@ -617,7 +1087,391 @@
             13: { nome: 'Rei', desc: 'O Arquétipo Puro. Maestria, autoridade, visão, estrutura masculina.' }
         };
 
-        // Sistema de Comentários (simulado - em produção, conectaria a um backend Flask)
+        // Gerar baralho completo
+        const baralhoCompleto = [];
+        Object.keys(divinasMap).forEach(naipeKey => {
+            for (let numero = 1; numero <= 13; numero++) {
+                const divina = divinasMap[naipeKey];
+                const acao = acoesMap[numero];
+                baralhoCompleto.push({
+                    id: `${naipeKey}_${numero}`,
+                    numero: numero,
+                    naipe: naipeKey,
+                    divinaNome: divina.nome,
+                    divinaIcone: divina.icone,
+                    divinaDesc: divina.desc,
+                    corClasse: divina.corClasse,
+                    cor: divina.cor,
+                    tipoDivina: divina.tipo,
+                    acaoNome: acao.nome,
+                    acaoDesc: acao.desc,
+                    nomeCompleto: `${acao.nome} de ${divina.nome.split(' ')[0]}`,
+                    imgPlaceholder: `hatsunemiku${(Object.keys(divinasMap).indexOf(naipeKey) * 13) + numero}.jpg`,
+                    tipoCarta: numero <= 10 ? 'numero' : (numero === 11 ? 'valete' : (numero === 12 ? 'dama' : 'rei')),
+                    significado: `${acao.desc} dentro do domínio de ${divina.nome.split('(')[0]}. Esta carta fala sobre como ${acao.nome.toLowerCase()} se manifesta nas áreas de ${divina.nome.split(' ')[2] ? divina.nome.split(' ')[2].replace(')', '') : 'emoção'} e ${divina.nome.split(' ')[3] ? divina.nome.split(' ')[3] : 'expressão'}.`
+                });
+            }
+        });
+
+        // ============================================
+        // SISTEMA DE COOLDOWN
+        // ============================================
+
+        const cooldownConfig = {
+            'momento': { horas: 1, nome: 'Momento', emoji: '⚡' },
+            'dia': { horas: 24, nome: 'Dia', emoji: '🌞' },
+            'semana': { horas: 168, nome: 'Semana', emoji: '📅' },
+            'mes': { horas: 720, nome: 'Mês', emoji: '🌙' }
+        };
+
+        let visualizacaoCooldown = {
+            'momento': 'tempo',
+            'dia': 'tempo', 
+            'semana': 'tempo',
+            'mes': 'tempo'
+        };
+
+        // Inicializar localStorage
+        function inicializarStorage() {
+            if (!localStorage.getItem('oraculoTiragens')) {
+                localStorage.setItem('oraculoTiragens', JSON.stringify({
+                    ultimasTiragens: {},
+                    baralhosSalvos: [],
+                    visualizacaoCooldown: visualizacaoCooldown
+                }));
+            }
+            
+            // Carregar configurações
+            const dados = JSON.parse(localStorage.getItem('oraculoTiragens'));
+            if (dados.visualizacaoCooldown) {
+                visualizacaoCooldown = dados.visualizacaoCooldown;
+            }
+        }
+
+        // Atualizar cooldowns
+        function atualizarCooldowns() {
+            const dados = JSON.parse(localStorage.getItem('oraculoTiragens'));
+            const agora = new Date().getTime();
+            
+            Object.keys(cooldownConfig).forEach(tipo => {
+                const btn = document.getElementById(`btn-${tipo}`);
+                const timer = document.getElementById(`cooldown-${tipo}`);
+                const ultimaTiragem = dados.ultimasTiragens[tipo];
+                
+                if (!ultimaTiragem) {
+                    btn.disabled = false;
+                    timer.textContent = '🟢 Disponível';
+                    timer.style.color = 'var(--cor-success)';
+                    return;
+                }
+                
+                const cooldownMs = cooldownConfig[tipo].horas * 60 * 60 * 1000;
+                const tempoPassado = agora - ultimaTiragem.timestamp;
+                const tempoRestante = cooldownMs - tempoPassado;
+                
+                if (tempoRestante <= 0) {
+                    btn.disabled = false;
+                    timer.textContent = '🟢 Disponível';
+                    timer.style.color = 'var(--cor-success)';
+                } else {
+                    btn.disabled = true;
+                    const visualizacao = visualizacaoCooldown[tipo];
+                    
+                    if (visualizacao === 'tempo') {
+                        const horas = Math.floor(tempoRestante / (1000 * 60 * 60));
+                        const minutos = Math.floor((tempoRestante % (1000 * 60 * 60)) / (1000 * 60));
+                        timer.textContent = `${horas}h ${minutos}m`;
+                        timer.style.color = 'var(--cor-warning)';
+                    } else if (visualizacao === 'proxima') {
+                        const proximaDisponivel = new Date(ultimaTiragem.timestamp + cooldownMs);
+                        const horas = proximaDisponivel.getHours().toString().padStart(2, '0');
+                        const minutos = proximaDisponivel.getMinutes().toString().padStart(2, '0');
+                        timer.textContent = `${horas}:${minutos}`;
+                        timer.style.color = 'var(--cor-warning)';
+                    } else {
+                        timer.textContent = '⏳ Em cooldown';
+                        timer.style.color = 'var(--cor-disabled)';
+                    }
+                }
+            });
+        }
+
+        // ============================================
+        // SISTEMA DE TIRAGENS
+        // ============================================
+
+        // Gerar tiragem
+        function gerarTiragem(tipo) {
+            let cartas = [];
+            const baralhoCopia = [...baralhoCompleto];
+            
+            // Embaralhar
+            for (let i = baralhoCopia.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [baralhoCopia[i], baralhoCopia[j]] = [baralhoCopia[j], baralhoCopia[i]];
+            }
+            
+            const cartasLetra = baralhoCopia.filter(c => c.naipe === 'copas');
+            const cartasNumero = baralhoCopia.filter(c => c.tipoCarta === 'numero');
+            
+            switch(tipo) {
+                case 'momento':
+                    cartas = [baralhoCopia[0]];
+                    break;
+                case 'dia':
+                    cartas = [
+                        cartasLetra[0],
+                        baralhoCopia[1],
+                        baralhoCopia[2],
+                        baralhoCopia[3]
+                    ];
+                    break;
+                case 'semana':
+                    cartas = [
+                        cartasLetra[0],
+                        cartasLetra[1],
+                        cartasLetra[2],
+                        ...baralhoCopia.slice(1, 7)
+                    ];
+                    break;
+                case 'mes':
+                    cartas = [
+                        baralhoCopia[0],
+                        cartasLetra[0],
+                        cartasLetra[1],
+                        cartasLetra[2],
+                        ...cartasNumero.slice(0, 9)
+                    ];
+                    break;
+            }
+            
+            return cartas;
+        }
+
+        // Salvar tiragem
+        function salvarTiragem(tipo, cartas) {
+            const dados = JSON.parse(localStorage.getItem('oraculoTiragens'));
+            const agora = new Date();
+            
+            dados.ultimasTiragens[tipo] = {
+                timestamp: agora.getTime(),
+                data: agora.toISOString(),
+                cartasIds: cartas.map(c => c.id)
+            };
+            
+            dados.baralhosSalvos.unshift({
+                tipo: tipo,
+                data: agora.toISOString(),
+                dataLegivel: agora.toLocaleDateString('pt-BR', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                cartas: cartas.map(c => ({ 
+                    id: c.id, 
+                    nomeCompleto: c.nomeCompleto,
+                    naipe: c.naipe,
+                    numero: c.numero,
+                    tipoCarta: c.tipoCarta
+                }))
+            });
+            
+            dados.baralhosSalvos = dados.baralhosSalvos.slice(0, 10);
+            dados.visualizacaoCooldown = visualizacaoCooldown;
+            
+            localStorage.setItem('oraculoTiragens', JSON.stringify(dados));
+        }
+
+        // ============================================
+        // EXIBIÇÃO DE RESULTADOS
+        // ============================================
+
+        function exibirTiragem(tipo, cartas) {
+            const container = document.getElementById('cartasResultado');
+            const titulo = document.getElementById('tituloTiragem');
+            const resultadosSection = document.getElementById('resultadosTiragem');
+            const mensagemSuspense = document.getElementById('mensagemSuspense');
+            const progresso = document.getElementById('revelacaoProgresso');
+            const barra = document.getElementById('revelacaoBarra');
+            
+            container.innerHTML = '';
+            titulo.textContent = `${cooldownConfig[tipo].emoji} Tiragem do ${cooldownConfig[tipo].nome}`;
+            resultadosSection.classList.add('ativo');
+            
+            // Criar cartas
+            cartas.forEach((carta, index) => {
+                const cartaEl = document.createElement('div');
+                cartaEl.className = 'carta-resultado';
+                cartaEl.dataset.index = index;
+                cartaEl.dataset.cartaId = carta.id;
+                
+                let tipoBadge = 'aleatoria';
+                let tipoBadgeTexto = 'Aleatória';
+                
+                if (tipo === 'dia' && index === 0) {
+                    tipoBadge = 'letra';
+                    tipoBadgeTexto = 'Letra';
+                } else if (tipo === 'semana' && index < 3) {
+                    tipoBadge = 'letra';
+                    tipoBadgeTexto = 'Letra';
+                } else if (tipo === 'mes') {
+                    if (index === 0) {
+                        tipoBadge = 'aleatoria';
+                        tipoBadgeTexto = 'Aleatória';
+                    } else if (index >= 1 && index <= 3) {
+                        tipoBadge = 'letra';
+                        tipoBadgeTexto = 'Letra';
+                    } else {
+                        tipoBadge = 'numero';
+                        tipoBadgeTexto = 'Número';
+                    }
+                }
+                
+                cartaEl.innerHTML = `
+                    <div class="carta-inner">
+                        <div class="carta-verso ${tipo}">
+                            <div class="carta-verso-emoji">${cooldownConfig[tipo].emoji}</div>
+                            <div style="font-size: 1rem; margin-top: 10px;">Carta ${index + 1}</div>
+                        </div>
+                        <div class="carta-frente">
+                            <div class="carta-numero">${carta.numero}</div>
+                            <div class="carta-tipo-badge ${tipoBadge}-badge">${tipoBadgeTexto}</div>
+                            <div class="naipe-icone ${carta.corClasse}">${carta.divinaIcone}</div>
+                            <div class="carta-titulo">${carta.acaoNome}</div>
+                            <div class="carta-desc">${carta.divinaNome.split('(')[0]}</div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(cartaEl);
+            });
+            
+            resultadosSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            // Revelação com suspense
+            let cartasReveladas = 0;
+            const totalCartas = cartas.length;
+            const mensagensSuspense = [
+                "🎶 Hatsune Miku está sintonizando as energias...",
+                "✨ As cartas estão se alinhando com o cosmo digital...",
+                "🔮 Os fios do destino estão se tecendo...",
+                "🎴 O oráculo está quase pronto para falar...",
+                "🌟 A verdade está prestes a ser revelada!"
+            ];
+            
+            progresso.classList.add('ativo');
+            barra.style.width = '0%';
+            
+            function revelarProximaCarta() {
+                if (cartasReveladas >= totalCartas) {
+                    mensagemSuspense.textContent = "🎉 Todas as cartas foram reveladas! Clique em qualquer carta para ver detalhes! ✨";
+                    progresso.classList.remove('ativo');
+                    
+                    // Adicionar badges clicáveis e eventos
+                    adicionarEventosCliqueCartas(cartas);
+                    return;
+                }
+                
+                const mensagemIndex = Math.min(cartasReveladas, mensagensSuspense.length - 1);
+                mensagemSuspense.textContent = mensagensSuspense[mensagemIndex];
+                
+                const cartaEl = container.querySelector(`.carta-resultado[data-index="${cartasReveladas}"]`);
+                cartaEl.classList.add('carta-revelando');
+                
+                setTimeout(() => {
+                    cartaEl.classList.add('virada');
+                    cartaEl.classList.remove('carta-revelando');
+                    cartasReveladas++;
+                    
+                    const progressoPercent = (cartasReveladas / totalCartas) * 100;
+                    barra.style.width = `${progressoPercent}%`;
+                    
+                    const delay = 800 + Math.random() * 700;
+                    setTimeout(revelarProximaCarta, delay);
+                }, 600);
+            }
+            
+            setTimeout(() => {
+                revelarProximaCarta();
+            }, 1500);
+            
+            // Botão "Revelar Todas"
+            const btnRevelarTodas = document.getElementById('btnRevelarTodas');
+            btnRevelarTodas.onclick = () => {
+                const todasCartas = container.querySelectorAll('.carta-resultado');
+                todasCartas.forEach(carta => {
+                    carta.classList.add('virada');
+                });
+                
+                mensagemSuspense.textContent = "⚡ Todas as cartas reveladas! Clique em qualquer uma para ver detalhes!";
+                barra.style.width = '100%';
+                progresso.classList.remove('ativo');
+                
+                btnRevelarTodas.disabled = true;
+                btnRevelarTodas.innerHTML = '<i class="fas fa-check"></i> Todas Reveladas';
+                
+                // Adicionar eventos de clique
+                adicionarEventosCliqueCartas(cartas);
+            };
+        }
+
+        // ============================================
+        // EVENTOS DE CLIQUE NAS CARTAS
+        // ============================================
+
+        function adicionarEventosCliqueCartas(cartas) {
+            const cartasElementos = document.querySelectorAll('.carta-resultado');
+            
+            cartasElementos.forEach((cartaEl, index) => {
+                const carta = cartas[index];
+                
+                // Adicionar badge clicável
+                const badge = document.createElement('div');
+                badge.className = 'badge-clicavel';
+                badge.innerHTML = '<i class="fas fa-search"></i> Detalhes';
+                cartaEl.appendChild(badge);
+                
+                // Evento de clique
+                cartaEl.addEventListener('click', function(e) {
+                    if (this.classList.contains('virada')) {
+                        mostrarDetalhesCarta(carta.id);
+                    } else {
+                        const mensagem = document.getElementById('mensagemSuspense');
+                        mensagem.textContent = "✨ Revele esta carta primeiro para conhecer seus segredos!";
+                        mensagem.style.color = 'var(--cor-copas)';
+                        setTimeout(() => {
+                            mensagem.textContent = "🎶 Continue a revelação das cartas...";
+                            mensagem.style.color = '';
+                        }, 2000);
+                    }
+                });
+                
+                // Efeitos hover
+                cartaEl.addEventListener('mouseenter', function() {
+                    if (this.classList.contains('virada')) {
+                        this.style.transform = 'scale(1.05)';
+                        this.style.transition = 'transform 0.3s ease';
+                    }
+                });
+                
+                cartaEl.addEventListener('mouseleave', function() {
+                    this.style.transform = '';
+                });
+            });
+        }
+
+        // ============================================
+        // MODAL DE DETALHES
+        // ============================================
+
+        const modalDetalhes = document.getElementById('modalDetalhes');
+        const btnFecharModal = document.getElementById('btnFecharModal');
+        const modalBody = document.getElementById('modalBody');
+
+        // Sistema de comentários
         class SistemaComentarios {
             constructor() {
                 this.comentariosPorCarta = this.carregarComentarios();
@@ -660,60 +1514,9 @@
             obterComentarios(cartaId) {
                 return this.comentariosPorCarta[cartaId] || [];
             }
-            
-            // Simulação de API para HTMX
-            async simularPostComentario(formData) {
-                // Em produção, isso seria uma chamada fetch para seu Flask
-                await new Promise(resolve => setTimeout(resolve, 500)); // Simula delay
-                
-                const cartaId = formData.get('carta_id');
-                const usuario = formData.get('usuario') || 'Anônimo';
-                const texto = formData.get('texto');
-                
-                const comentario = this.adicionarComentario(cartaId, usuario, texto);
-                return comentario;
-            }
-            
-            async simularGetComentarios(cartaId) {
-                // Em produção, isso seria uma chamada fetch para seu Flask
-                await new Promise(resolve => setTimeout(resolve, 300)); // Simula delay
-                return this.obterComentarios(cartaId);
-            }
         }
 
-        // Instanciar sistema de comentários
         const sistemaComentarios = new SistemaComentarios();
-
-        // Gerar o baralho de 52 cartas
-        const baralhoCompleto = [];
-        Object.keys(divinasMap).forEach(naipeKey => {
-            for (let numero = 1; numero <= 13; numero++) {
-                const divina = divinasMap[naipeKey];
-                const acao = acoesMap[numero];
-                baralhoCompleto.push({
-                    id: `${naipeKey}_${numero}`,
-                    numero: numero,
-                    naipe: naipeKey,
-                    divinaNome: divina.nome,
-                    divinaIcone: divina.icone,
-                    divinaDesc: divina.desc,
-                    corClasse: divina.corClasse,
-                    cor: divina.cor,
-                    tipoDivina: divina.tipo,
-                    acaoNome: acao.nome,
-                    acaoDesc: acao.desc,
-                    nomeCompleto: `${acao.nome} de ${divina.nome.split(' ')[0]}`,
-                    imgPlaceholder: `hatsunemiku${(Object.keys(divinasMap).indexOf(naipeKey) * 13) + numero}.jpg`,
-                    tipoCarta: numero <= 10 ? 'numero' : (numero === 11 ? 'valete' : (numero === 12 ? 'dama' : 'rei')),
-                    significado: `${acao.desc} dentro do domínio de ${divina.nome.split('(')[0]}. Esta carta fala sobre como ${acao.nome.toLowerCase()} se manifesta nas áreas de ${divina.nome.split(' ')[2] ? divina.nome.split(' ')[2].replace(')', '') : 'emoção'} e ${divina.nome.split(' ')[3] ? divina.nome.split(' ')[3] : 'expressão'}.`
-                });
-            }
-        });
-
-        // Modal de Detalhes
-        const modalDetalhes = document.getElementById('modalDetalhes');
-        const btnFecharModal = document.getElementById('btnFecharModal');
-        const modalBody = document.getElementById('modalBody');
 
         function mostrarDetalhesCarta(cartaId) {
             const carta = baralhoCompleto.find(c => c.id === cartaId);
@@ -722,7 +1525,6 @@
             const divina = divinasMap[carta.naipe];
             const comentarios = sistemaComentarios.obterComentarios(cartaId);
             
-            // Preencher modal com informações da carta
             modalBody.innerHTML = `
                 <div class="carta-modal-visual">
                     <div class="carta-modal-grande ${carta.corClasse}" style="border: 5px solid ${carta.cor};">
@@ -767,36 +1569,28 @@
                         </span>
                     </div>
                     
-                    <form class="form-comentario" 
-                          hx-post="/api/comentarios" 
-                          hx-target="#lista-comentarios-${cartaId}"
-                          hx-swap="beforeend"
-                          hx-on::after-request="this.reset()"
-                          _="on htmx:afterRequest add .added to <textarea /> in me then wait 200ms then remove .added from <textarea /> in me">
+                    <form class="form-comentario" id="formComentario">
                         <input type="hidden" name="carta_id" value="${cartaId}">
                         
                         <div style="margin-bottom: 1rem;">
                             <input type="text" 
-                                   name="usuario" 
+                                   id="usuarioComentario"
                                    placeholder="Seu nome (opcional)" 
                                    style="width: 100%; padding: 10px 15px; border: 2px solid #e0c4ff; border-radius: 10px; margin-bottom: 10px;">
                         </div>
                         
                         <textarea 
-                            name="texto" 
+                            id="textoComentario"
                             placeholder="🎭 Compartilhe sua experiência com esta carta... O que você sentiu? Que mensagem recebeu?" 
                             required></textarea>
                         
-                        <button type="submit" class="btn-enviar-comentario">
+                        <button type="button" class="btn-enviar-comentario" id="btnEnviarComentario">
                             <span class="texto-btn">Enviar Comentário</span>
                             <i class="fas fa-paper-plane"></i>
-                            <span class="htmx-indicator" style="display: none;">
-                                <i class="fas fa-spinner fa-spin"></i> Enviando...
-                            </span>
                         </button>
                     </form>
                     
-                    <div class="lista-comentarios" id="lista-comentarios-${cartaId}">
+                    <div class="lista-comentarios" id="listaComentarios">
                         ${comentarios.length > 0 ? 
                             comentarios.map(coment => `
                                 <div class="comentario-item">
@@ -816,42 +1610,36 @@
                 </div>
             `;
             
-            // Mostrar modal
-            modalDetalhes.classList.add('ativo');
-            document.body.style.overflow = 'hidden';
+            // Configurar envio de comentário
+            const btnEnviar = document.getElementById('btnEnviarComentario');
+            const textoInput = document.getElementById('textoComentario');
+            const usuarioInput = document.getElementById('usuarioComentario');
+            const listaComentarios = document.getElementById('listaComentarios');
             
-            // Configurar HTMX para o formulário (simulação)
-            configurarHTMXForm(cartaId);
-        }
-
-        function configurarHTMXForm(cartaId) {
-            const form = modalBody.querySelector('.form-comentario');
-            if (!form) return;
-            
-            // Substituir a ação padrão do HTMX por nossa simulação
-            form.addEventListener('submit', async function(e) {
-                e.preventDefault();
+            btnEnviar.addEventListener('click', () => {
+                const texto = textoInput.value.trim();
+                if (!texto) {
+                    alert('Por favor, escreva um comentário!');
+                    return;
+                }
                 
-                const formData = new FormData(this);
-                const btnEnviar = this.querySelector('.btn-enviar-comentario');
-                const textarea = this.querySelector('textarea');
+                const usuario = usuarioInput.value.trim() || 'Anônimo';
                 
                 // Mostrar indicador de carregamento
                 btnEnviar.disabled = true;
-                btnEnviar.classList.add('htmx-request');
+                btnEnviar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
                 
-                try {
-                    // Simular chamada ao backend Flask
-                    const novoComentario = await sistemaComentarios.simularPostComentario(formData);
+                // Simular delay de rede
+                setTimeout(() => {
+                    const novoComentario = sistemaComentarios.adicionarComentario(cartaId, usuario, texto);
                     
-                    // Adicionar novo comentário à lista
-                    const listaComentarios = document.getElementById(`lista-comentarios-${cartaId}`);
+                    // Remover mensagem "sem comentários"
                     const semComentarios = listaComentarios.querySelector('.sem-comentarios');
-                    
                     if (semComentarios) {
                         semComentarios.remove();
                     }
                     
+                    // Adicionar novo comentário
                     const comentarioHTML = `
                         <div class="comentario-item" style="animation: slideIn 0.3s ease;">
                             <div class="comentario-header">
@@ -867,22 +1655,24 @@
                     
                     listaComentarios.insertAdjacentHTML('afterbegin', comentarioHTML);
                     
-                    // Efeito visual de confirmação
-                    textarea.classList.add('added');
-                    setTimeout(() => textarea.classList.remove('added'), 200);
+                    // Limpar formulário
+                    textoInput.value = '';
                     
-                    // Resetar formulário
-                    this.reset();
-                    
-                } catch (error) {
-                    console.error('Erro ao enviar comentário:', error);
-                    alert('❌ Erro ao enviar comentário. Tente novamente!');
-                } finally {
-                    // Esconder indicador de carregamento
+                    // Restaurar botão
                     btnEnviar.disabled = false;
-                    btnEnviar.classList.remove('htmx-request');
-                }
+                    btnEnviar.innerHTML = '<span class="texto-btn">Enviar Comentário</span><i class="fas fa-paper-plane"></i>';
+                    
+                    // Efeito visual
+                    textoInput.style.borderColor = 'var(--cor-success)';
+                    setTimeout(() => {
+                        textoInput.style.borderColor = '#e0c4ff';
+                    }, 1000);
+                    
+                }, 800);
             });
+            
+            modalDetalhes.classList.add('ativo');
+            document.body.style.overflow = 'hidden';
         }
 
         // Fechar modal
@@ -891,7 +1681,6 @@
             document.body.style.overflow = 'auto';
         });
 
-        // Fechar modal ao clicar fora
         modalDetalhes.addEventListener('click', (e) => {
             if (e.target === modalDetalhes) {
                 modalDetalhes.classList.remove('ativo');
@@ -899,7 +1688,6 @@
             }
         });
 
-        // Fechar modal com ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && modalDetalhes.classList.contains('ativo')) {
                 modalDetalhes.classList.remove('ativo');
@@ -907,124 +1695,171 @@
             }
         });
 
-        // Modificar a função exibirTiragem para adicionar eventos de clique nas cartas
-        function exibirTiragemComClique(tipo, cartas) {
-            // [Código anterior de exibirTiragem...]
+        // ============================================
+        // BARALHOS SALVOS
+        // ============================================
+
+        function carregarBaralhosSalvos() {
+            const dados = JSON.parse(localStorage.getItem('oraculoTiragens'));
+            const container = document.getElementById('baralhosLista');
+            const semBaralhosMsg = document.getElementById('semBaralhosMsg');
             
-            // Depois de criar as cartas, adicionar evento de clique
-            setTimeout(() => {
-                const cartasElementos = document.querySelectorAll('.carta-resultado');
-                cartasElementos.forEach((cartaEl, index) => {
-                    const carta = cartas[index];
-                    
-                    // Adicionar badge clicável
-                    const badge = document.createElement('div');
-                    badge.className = 'badge-clicavel';
-                    badge.innerHTML = '<i class="fas fa-search"></i> Detalhes';
-                    cartaEl.appendChild(badge);
-                    
-                    // Adicionar evento de clique
-                    cartaEl.addEventListener('click', function(e) {
-                        // Não ativar se estiver clicando no botão de revelar todas
-                        if (e.target.closest('.btn-revelar-todas')) return;
-                        
-                        // Verificar se a carta já foi revelada
-                        if (this.classList.contains('virada')) {
-                            mostrarDetalhesCarta(carta.id);
-                        } else {
-                            // Se não foi revelada, mostrar mensagem
-                            const mensagem = document.getElementById('mensagemSuspense');
-                            mensagem.textContent = "✨ Revele esta carta primeiro para conhecer seus segredos!";
-                            mensagem.style.color = 'var(--cor-copas)';
-                            setTimeout(() => {
-                                mensagem.textContent = "🎶 Continue a revelação das cartas...";
-                                mensagem.style.color = '';
-                            }, 2000);
-                        }
-                    });
-                    
-                    // Efeito hover
-                    cartaEl.addEventListener('mouseenter', function() {
-                        if (this.classList.contains('virada')) {
-                            this.style.transform = 'scale(1.05)';
-                        }
-                    });
-                    
-                    cartaEl.addEventListener('mouseleave', function() {
-                        this.style.transform = '';
-                    });
+            if (!dados.baralhosSalvos || dados.baralhosSalvos.length === 0) {
+                semBaralhosMsg.style.display = 'block';
+                container.innerHTML = '<p style="text-align: center; color: var(--cor-texto-claro); padding: 20px;" id="semBaralhosMsg">Nenhuma tiragem realizada ainda. Faça sua primeira consulta! 🔮</p>';
+                return;
+            }
+            
+            semBaralhosMsg.style.display = 'none';
+            container.innerHTML = '';
+            
+            dados.baralhosSalvos.forEach((baralho, index) => {
+                const item = document.createElement('div');
+                item.className = 'baralho-salvo-item';
+                item.style.borderLeftColor = getCorPorTipo(baralho.tipo);
+                
+                let miniCartasHTML = '';
+                baralho.cartas.slice(0, 5).forEach(carta => {
+                    const cor = divinasMap[carta.naipe]?.cor || '#8a7cff';
+                    miniCartasHTML += `<div class="baralho-salvo-carta-mini" style="background: ${cor};">${carta.numero}</div>`;
                 });
-            }, 500);
+                
+                if (baralho.cartas.length > 5) {
+                    miniCartasHTML += `<div class="baralho-salvo-carta-mini" style="background: var(--cor-destaque);">+${baralho.cartas.length - 5}</div>`;
+                }
+                
+                item.innerHTML = `
+                    <div class="baralho-salvo-info">
+                        <div class="baralho-salvo-tipo">
+                            ${cooldownConfig[baralho.tipo].emoji} ${cooldownConfig[baralho.tipo].nome}
+                        </div>
+                        <div class="baralho-salvo-data">
+                            <i class="far fa-calendar"></i> ${baralho.dataLegivel}
+                        </div>
+                    </div>
+                    <div class="baralho-salvo-cartas">
+                        ${miniCartasHTML}
+                    </div>
+                `;
+                
+                // Evento para recarregar tiragem
+                item.addEventListener('click', () => {
+                    // Recriar as cartas do baralho salvo
+                    const cartasRecuperadas = [];
+                    baralho.cartas.forEach(cartaInfo => {
+                        const carta = baralhoCompleto.find(c => c.id === cartaInfo.id);
+                        if (carta) cartasRecuperadas.push(carta);
+                    });
+                    
+                    if (cartasRecuperadas.length > 0) {
+                        exibirTiragem(baralho.tipo, cartasRecuperadas);
+                        
+                        // Atualizar mensagem
+                        document.getElementById('tituloTiragem').textContent = 
+                            `${cooldownConfig[baralho.tipo].emoji} Tiragem Anterior do ${cooldownConfig[baralho.tipo].nome}`;
+                        
+                        // Rolar para resultados
+                        document.getElementById('resultadosTiragem').scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+                
+                container.appendChild(item);
+            });
         }
 
-        // Atualizar o evento dos botões de tiragem para usar a nova função
-        function configurarBotoesTiragemAtualizado() {
+        function getCorPorTipo(tipo) {
+            switch(tipo) {
+                case 'momento': return 'var(--cor-paus)';
+                case 'dia': return 'var(--cor-copas)';
+                case 'semana': return 'var(--cor-ouros)';
+                case 'mes': return 'var(--cor-espadas)';
+                default: return 'var(--cor-destaque)';
+            }
+        }
+
+        // ============================================
+        // CONFIGURAÇÃO DOS BOTÕES
+        // ============================================
+
+        function configurarBotoesTiragem() {
             Object.keys(cooldownConfig).forEach(tipo => {
                 const btn = document.getElementById(`btn-${tipo}`);
-                btn.addEventListener('click', async () => {
-                    // [Verificações de cooldown...]
+                btn.addEventListener('click', () => {
+                    const dados = JSON.parse(localStorage.getItem('oraculoTiragens'));
+                    const ultimaTiragem = dados.ultimasTiragens[tipo];
+                    const agora = new Date().getTime();
                     
-                    // Gerar nova tiragem
+                    if (ultimaTiragem) {
+                        const cooldownMs = cooldownConfig[tipo].horas * 60 * 60 * 1000;
+                        const tempoRestante = cooldownMs - (agora - ultimaTiragem.timestamp);
+                        
+                        if (tempoRestante > 0) {
+                            alert(`⏳ A tiragem do ${cooldownConfig[tipo].nome} ainda está em cooldown! Aguarde mais um pouco.`);
+                            return;
+                        }
+                    }
+                    
                     const cartas = gerarTiragem(tipo);
-                    
-                    // Exibir resultado COM funcionalidade de clique
-                    exibirTiragemComClique(tipo, cartas);
-                    
-                    // [Resto do código...]
+                    exibirTiragem(tipo, cartas);
+                    salvarTiragem(tipo, cartas);
+                    atualizarCooldowns();
+                    carregarBaralhosSalvos();
                 });
             });
         }
 
-        // Simulação de endpoint Flask para HTMX
-        // Em um projeto real, você teria endpoints como:
-        // POST /api/comentarios - Adicionar novo comentário
-        // GET /api/comentarios/:carta_id - Buscar comentários de uma carta
+        function configurarOpcoesCooldown() {
+            document.querySelectorAll('.cooldown-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tipo = this.dataset.tipo;
+                    const visualizacao = this.dataset.visualizacao;
+                    
+                    visualizacaoCooldown[tipo] = visualizacao;
+                    
+                    const opcoesTipo = document.querySelectorAll(`.cooldown-btn[data-tipo="${tipo}"]`);
+                    opcoesTipo.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const dados = JSON.parse(localStorage.getItem('oraculoTiragens'));
+                    dados.visualizacaoCooldown = visualizacaoCooldown;
+                    localStorage.setItem('oraculoTiragens', JSON.stringify(dados));
+                    
+                    atualizarCooldowns();
+                });
+            });
+            
+            // Aplicar configurações salvas
+            document.querySelectorAll('.cooldown-btn').forEach(btn => {
+                const tipo = btn.dataset.tipo;
+                const visualizacao = btn.dataset.visualizacao;
+                
+                if (visualizacaoCooldown[tipo] === visualizacao) {
+                    btn.classList.add('active');
+                }
+            });
+        }
 
-        // Inicialização
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
+
         document.addEventListener('DOMContentLoaded', () => {
-            // [Código de inicialização anterior...]
+            inicializarStorage();
+            atualizarCooldowns();
+            carregarBaralhosSalvos();
+            configurarBotoesTiragem();
+            configurarOpcoesCooldown();
             
-            // Configurar botões com a nova função
-            configurarBotoesTiragemAtualizado();
+            // Atualizar cooldowns a cada minuto
+            setInterval(atualizarCooldowns, 60000);
             
-            // Adicionar instrução sobre clicar nas cartas
-            const intro = document.querySelector('.tiragens-temporais p');
-            if (intro) {
-                intro.innerHTML += '<br><strong>💡 Dica:</strong> Após revelar as cartas, clique em qualquer uma para ver detalhes completos e adicionar comentários!';
-            }
+            // Efeito no título
+            const titulo = document.querySelector('h1');
+            setInterval(() => {
+                titulo.classList.toggle('piscar');
+                setTimeout(() => titulo.classList.toggle('piscar'), 500);
+            }, 5000);
         });
-
-        // Funções auxiliares do código anterior (gerarTiragem, etc.)
-        // [Manter todas as funções do código anterior aqui...]
-        
-        // Exemplo de endpoint Flask que você criaria:
-        /*
-        from flask import Flask, request, jsonify
-        app = Flask(__name__)
-        
-        @app.route('/api/comentarios', methods=['POST'])
-        def adicionar_comentario():
-            data = request.json
-            carta_id = data.get('carta_id')
-            usuario = data.get('usuario', 'Anônimo')
-            texto = data.get('texto')
-            
-            # Salvar no banco de dados
-            novo_comentario = {
-                'id': gerar_id(),
-                'usuario': usuario,
-                'texto': texto,
-                'data': datetime.now().isoformat()
-            }
-            
-            return jsonify(novo_comentario), 201
-        
-        @app.route('/api/comentarios/<carta_id>', methods=['GET'])
-        def obter_comentarios(carta_id):
-            # Buscar do banco de dados
-            comentarios = db.comentarios.find({'carta_id': carta_id})
-            return jsonify(list(comentarios))
-        */
     </script>
 </body>
 </html>
