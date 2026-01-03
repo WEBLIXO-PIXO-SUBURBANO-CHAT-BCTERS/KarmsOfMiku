@@ -13,29 +13,146 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        :root {
+        :root, :root.pink {
             --cor-copas: #ff6b9d;
             --cor-ouros: #ffcc00;
             --cor-paus: #6bcf7f;
             --cor-espadas: #8a7cff;
             --cor-fundo: #fff5f9;
+            --cor-fundo-card: #fff;
             --cor-destaque: #4a225d;
             --cor-texto: #333;
             --cor-texto-claro: #666;
+            --cor-borda: #f0e0ff;
             --sombra-suave: 0 8px 25px rgba(0, 0, 0, 0.07);
+            --img-bg: radial-gradient(#ffd6e7 1px, transparent 1px);
+        }
+
+        :root.dark {
+            --cor-copas: #ff7bac;
+            --cor-ouros: #ffd75e;
+            --cor-paus: #7ae28f;
+            --cor-espadas: #9d8eff;
+            --cor-fundo: #121212;
+            --cor-fundo-card: #1e1e1e;
+            --cor-destaque: #c89bff;
+            --cor-texto: #f0f0f0;
+            --cor-texto-claro: #aaa;
+            --cor-borda: #333;
+            --sombra-suave: 0 8px 25px rgba(0, 0, 0, 0.3);
+            --img-bg: radial-gradient(#333 1px, transparent 1px);
+        }
+
+        :root.ciano {
+            --cor-copas: #ff4d7a;
+            --cor-ouros: #ffcc00;
+            --cor-paus: #00cc88;
+            --cor-espadas: #8a7cff;
+            --cor-fundo: #f0fdff;
+            --cor-fundo-card: #fff;
+            --cor-destaque: #0088aa;
+            --cor-texto: #005566;
+            --cor-texto-claro: #008899;
+            --cor-borda: #b3ecff;
+            --sombra-suave: 0 8px 25px rgba(0, 136, 170, 0.1);
+            --img-bg: radial-gradient(#b3ecff 1px, transparent 1px);
+        }
+
+        :root.verde-amarelo {
+            --cor-copas: #ff6b6b;
+            --cor-ouros: #c4d300;
+            --cor-paus: #6bcf7f;
+            --cor-espadas: #a685ff;
+            --cor-fundo: #feffe5;
+            --cor-fundo-card: #fff;
+            --cor-destaque: #7a8c00;
+            --cor-texto: #333;
+            --cor-texto-claro: #666;
+            --cor-borda: #e0e6a3;
+            --sombra-suave: 0 8px 25px rgba(198, 214, 0, 0.1);
+            --img-bg: radial-gradient(#e0e6a3 1px, transparent 1px);
         }
 
         body {
             background-color: var(--cor-fundo);
             color: var(--cor-texto);
             line-height: 1.6;
-            background-image: radial-gradient(#ffd6e7 1px, transparent 1px);
+            background-image: var(--img-bg);
             background-size: 30px 30px;
             padding-bottom: 50px;
+            transition: background-color 0.5s, color 0.5s;
         }
 
+        .controles-superiores {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 15px 20px;
+            background-color: var(--cor-fundo-card);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .seletor-tema {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-tema {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--cor-borda);
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .btn-tema:hover { transform: scale(1.1); }
+        .btn-tema.ativo { border-color: var(--cor-texto); box-shadow: 0 0 8px var(--cor-destaque);}
+
+        .tema-pink { background: linear-gradient(135deg, #ff6b9d, #4a225d);}
+        .tema-dark { background: linear-gradient(135deg, #121212, #c89bff);}
+        .tema-ciano { background: linear-gradient(135deg, #00f0ff, #0088aa);}
+        .tema-verde-amarelo { background: linear-gradient(135deg, #c4d300, #7a8c00);}
+
+        .player-musica {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--cor-fundo);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid var(--cor-borda);
+        }
+        .player-musica span {
+            font-size: 0.9rem;
+            color: var(--cor-texto-claro);
+        }
+        #controlesMusica {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-musica {
+            background: var(--cor-destaque);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-musica:hover { background: var(--cor-copas); opacity: 0.9;}
+
         header {
-            background: linear-gradient(135deg, var(--cor-destaque) 0%, #b28fce 100%);
+            background: linear-gradient(135deg, var(--cor-destaque) 0%, color-mix(in srgb, var(--cor-destaque) 40%, transparent) 100%);
             color: white;
             text-align: center;
             padding: 3rem 1rem;
@@ -43,7 +160,6 @@
             position: relative;
             overflow: hidden;
         }
-
         header::before {
             content: "♡ ♢ ♣ ♠";
             position: absolute;
@@ -54,91 +170,47 @@
             opacity: 0.15;
             letter-spacing: 20px;
         }
+        h1 { font-size: 2.8rem; margin-bottom: 0.5rem; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); }
+        .subtitulo { font-size: 1.2rem; opacity: 0.9; max-width: 800px; margin: 0 auto; }
 
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            position: relative;
-            z-index: 2;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
 
-        .subtitulo {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .intro {
-            background: white;
+        .intro, .filtros {
+            background: var(--cor-fundo-card);
             padding: 2rem;
             border-radius: 20px;
             box-shadow: var(--sombra-suave);
             margin-bottom: 2.5rem;
             border-left: 6px solid var(--cor-copas);
         }
+        .intro h2 { color: var(--cor-destaque); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+        .intro h2 i { color: var(--cor-copas); }
 
-        .intro h2 {
-            color: var(--cor-destaque);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .intro h2 i {
-            color: var(--cor-copas);
-        }
-
-        .filtros {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 20px;
-            box-shadow: var(--sombra-suave);
-            margin-bottom: 2.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .filtro-grupo {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .filtro-grupo label {
-            font-weight: bold;
-            color: var(--cor-destaque);
-            font-size: 0.9rem;
-        }
-
+        .filtros { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center; }
+        .filtro-grupo { display: flex; flex-direction: column; gap: 8px; }
+        .filtro-grupo label { font-weight: bold; color: var(--cor-destaque); font-size: 0.9rem; }
         select {
             padding: 10px 15px;
             border-radius: 50px;
-            border: 2px solid #e0c4ff;
-            background: white;
+            border: 2px solid var(--cor-borda);
+            background: var(--cor-fundo-card);
             color: var(--cor-texto);
             font-weight: bold;
             cursor: pointer;
             min-width: 180px;
             transition: all 0.3s ease;
         }
+        select:hover { border-color: var(--cor-espadas); transform: translateY(-2px); }
 
-        select:hover {
-            border-color: var(--cor-espadas);
-            transform: translateY(-2px);
+        #btnResetarFiltros {
+            padding: 10px 20px;
+            background: var(--cor-destaque);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            align-self: flex-end;
         }
 
         .baralho-container {
@@ -146,11 +218,12 @@
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 25px;
             margin-bottom: 3rem;
+            position: relative;
         }
 
         .carta {
             aspect-ratio: 2/3;
-            background: white;
+            background: var(--cor-fundo-card);
             border-radius: 15px;
             box-shadow: var(--sombra-suave);
             display: flex;
@@ -160,11 +233,7 @@
             cursor: pointer;
             position: relative;
         }
-
-        .carta:hover {
-            transform: translateY(-15px) scale(1.03);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
+        .carta:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); }
 
         .carta-cabecalho {
             height: 60%;
@@ -173,13 +242,13 @@
             justify-content: center;
             padding: 15px;
             position: relative;
+            border-bottom: 4px solid;
         }
-
         .carta-cabecalho span {
             position: absolute;
             top: 15px;
             left: 15px;
-            background: white;
+            background: var(--cor-fundo-card);
             color: var(--cor-destaque);
             width: 35px;
             height: 35px;
@@ -191,11 +260,10 @@
             font-size: 1.2rem;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-
         .img-placeholder {
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #f5d6ff 0%, #ffd6e8 100%);
+            background: linear-gradient(135deg, color-mix(in srgb, var(--cor-copas) 15%, transparent) 0%, color-mix(in srgb, var(--cor-espadas) 15%, transparent) 100%);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -204,101 +272,85 @@
             font-size: 0.9rem;
             text-align: center;
             padding: 10px;
-            border: 2px dashed #d9b8ff;
+            border: 2px dashed var(--cor-borda);
         }
+        .carta-corpo { padding: 20px 15px 15px; flex-grow: 1; background: color-mix(in srgb, var(--cor-fundo-card) 95%, var(--cor-destaque)); border-top: 1px solid var(--cor-borda); }
+        .naipe-icone { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+        .copas { color: var(--cor-copas); } .ouros { color: var(--cor-ouros); } .paus { color: var(--cor-paus); } .espadas { color: var(--cor-espadas); }
+        .carta-titulo { font-weight: bold; color: var(--cor-destaque); margin-bottom: 5px; font-size: 1.1rem; }
+        .carta-desc { font-size: 0.8rem; color: var(--cor-texto-claro); line-height: 1.4; }
 
-        .carta-corpo {
-            padding: 20px 15px 15px;
-            flex-grow: 1;
-            background: #fdf7ff;
-            border-top: 1px solid #f0e0ff;
-        }
-
-        .naipe-icone {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .copas { color: var(--cor-copas); }
-        .ouros { color: var(--cor-ouros); }
-        .paus { color: var(--cor-paus); }
-        .espadas { color: var(--cor-espadas); }
-
-        .carta-titulo {
-            font-weight: bold;
-            color: var(--cor-destaque);
-            margin-bottom: 5px;
-            font-size: 1.1rem;
-        }
-
-        .carta-desc {
-            font-size: 0.8rem;
-            color: var(--cor-texto-claro);
-            line-height: 1.4;
-        }
-
-        .detalhes-carta {
-            background: white;
-            padding: 2.5rem;
+        /* Estilo para o Card Expandido (Modal no lugar) */
+        .carta-expandida {
+            grid-column: span 2;
+            grid-row: span 2;
+            aspect-ratio: auto;
+            background: var(--cor-fundo-card);
             border-radius: 20px;
-            box-shadow: var(--sombra-suave);
-            margin-top: 2rem;
-            border-top: 8px solid;
-            display: none;
+            box-shadow: var(--sombra-suave), 0 0 40px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            z-index: 10;
+            position: relative;
+            animation: aparecerModal 0.5s ease;
+            border: 3px solid var(--cor-destaque);
+            display: flex;
+            flex-direction: column;
+        }
+        @keyframes aparecerModal {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        .detalhes-carta.ativa {
-            display: block;
-            animation: aparecer 0.6s ease;
+        .carta-expandida .btn-fechar {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--cor-texto-claro);
+            color: var(--cor-fundo-card);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 11;
         }
+        .carta-expandida .btn-fechar:hover { background: var(--cor-copas); }
 
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .detalhes-cabecalho {
+        .exp-cabecalho {
             display: flex;
             align-items: center;
             gap: 20px;
             margin-bottom: 1.5rem;
+            padding-right: 40px;
         }
-
-        .detalhes-numero {
+        .exp-numero {
             background: var(--cor-destaque);
             color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
+            min-width: 70px;
+            height: 70px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: bold;
         }
+        .exp-info h3 { font-size: 2.2rem; color: var(--cor-destaque); line-height: 1.1; }
+        .exp-info .divina { font-size: 1.2rem; color: var(--cor-texto-claro); margin-top: 8px; }
 
-        .detalhes-info h3 {
-            font-size: 2rem;
-            color: var(--cor-destaque);
+        .exp-corpo {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            flex-grow: 1;
         }
-
-        .detalhes-info .divina {
-            font-size: 1.1rem;
-            color: var(--cor-texto-claro);
-            margin-top: 5px;
-        }
-
-        .detalhes-significado {
-            margin-top: 1.5rem;
-        }
-
-        .detalhes-significado h4 {
-            color: var(--cor-destaque);
-            margin-bottom: 0.8rem;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #f0e0ff;
-        }
+        .exp-significado, .exp-descricao { margin-top: 10px; }
+        .exp-significado h4, .exp-descricao h4 { color: var(--cor-destaque); margin-bottom: 0.8rem; padding-bottom: 8px; border-bottom: 2px solid var(--cor-borda); display: flex; align-items: center; gap: 10px;}
+        .exp-descricao p { background: color-mix(in srgb, var(--cor-fundo) 70%, transparent); padding: 20px; border-radius: 15px; border-left: 6px solid var(--cor-destaque); line-height: 1.7; }
 
         footer {
             text-align: center;
@@ -306,31 +358,42 @@
             color: var(--cor-texto-claro);
             font-size: 0.9rem;
             padding-top: 2rem;
-            border-top: 1px solid #f0e0ff;
+            border-top: 1px solid var(--cor-borda);
         }
 
+        @media (max-width: 1100px) {
+            .carta-expandida { grid-column: span 2; }
+        }
         @media (max-width: 768px) {
-            .baralho-container {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-                gap: 15px;
-            }
-
-            h1 {
-                font-size: 2.2rem;
-            }
-
-            .filtros {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            select {
-                width: 100%;
-            }
+            .baralho-container { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+            .carta-expandida { grid-column: 1 / -1; grid-row: span 2; }
+            h1 { font-size: 2.2rem; }
+            .controles-superiores { flex-direction: column; align-items: stretch; }
+            .player-musica { justify-content: center; }
+            .exp-info h3 { font-size: 1.8rem; }
+            .exp-cabecalho { flex-direction: column; align-items: flex-start; gap: 15px; }
         }
     </style>
 </head>
-<body>
+<body class="pink">
+    <div class="controles-superiores">
+        <div class="seletor-tema">
+            <div class="btn-tema tema-pink ativo" data-tema="pink" title="Tema Pink"></div>
+            <div class="btn-tema tema-dark" data-tema="dark" title="Modo Escuro"></div>
+            <div class="btn-tema tema-ciano" data-tema="ciano" title="Tema Ciano"></div>
+            <div class="btn-tema tema-verde-amarelo" data-tema="verde-amarelo" title="Tema Verde-Amarelo"></div>
+        </div>
+
+        <div class="player-musica">
+            <span id="nomeMusica">Hatsune Miku - Senbonzakura</span>
+            <div id="controlesMusica">
+                <button class="btn-musica" id="btnAnterior"><i class="fas fa-step-backward"></i></button>
+                <button class="btn-musica" id="btnPlayPause"><i class="fas fa-play"></i></button>
+                <button class="btn-musica" id="btnProxima"><i class="fas fa-step-forward"></i></button>
+            </div>
+        </div>
+    </div>
+
     <header>
         <h1><i class="fas fa-crown"></i> Oráculo da Deusa Hatsune Miku</h1>
         <p class="subtitulo">Um sistema divinatório de 52 cartas onde a tradição encontra a voz virtual. Cada carta é um arquétipo, uma nota na sinfonia do destino.</p>
@@ -339,7 +402,7 @@
     <main class="container">
         <section class="intro">
             <h2><i class="fas fa-star"></i> O Sistema das 4 Divinas e 9 Ações</h2>
-            <p>Este oráculo se estrutura em <strong>4 Divinas</strong> (os naipes, arquétipos principais) e <strong>9 Ações</strong> (os números, situações e contextos). Cada carta combina uma Divina com uma Ação, criando uma mensagem única. <strong>Clique em qualquer carta abaixo</strong> para explorar seu significado em detalhes.</p>
+            <p>Este oráculo se estrutura em <strong>4 Divinas</strong> (os naipes, arquétipos principais) e <strong>9 Ações</strong> (os números, situações e contextos). Cada carta combina uma Divina com uma Ação, criando uma mensagem única. <strong>Clique em qualquer carta abaixo</strong> para explorar seu significado em detalhes. Clique novamente no "X" para fechar.</p>
             <p style="margin-top: 10px; font-style: italic; color: var(--cor-espadas);">"A voz que cria mundos, o código que decifra almas."</p>
         </section>
 
@@ -358,20 +421,13 @@
                 <label for="filtroNumero"><i class="fas fa-sort-numeric-down"></i> Filtrar por Número (Ação)</label>
                 <select id="filtroNumero">
                     <option value="todos">Todos os Números</option>
-                    <!-- As opções de 1 a 9 serão preenchidas por JavaScript -->
                 </select>
             </div>
-            <button id="btnResetarFiltros" style="padding: 10px 20px; background: var(--cor-destaque); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; align-self: flex-end;">
-                <i class="fas fa-redo"></i> Resetar Filtros
-            </button>
+            <button id="btnResetarFiltros"><i class="fas fa-redo"></i> Resetar Filtros</button>
         </section>
 
         <section class="baralho-container" id="baralho">
             <!-- As 52 cartas serão geradas dinamicamente por JavaScript aqui -->
-        </section>
-
-        <section class="detalhes-carta" id="detalhesCarta">
-            <!-- Os detalhes da carta selecionada aparecerão aqui -->
         </section>
     </main>
 
@@ -380,32 +436,115 @@
         <p style="margin-top: 5px; font-size: 0.8rem;">Este é um protótipo conceitual. As imagens das cartas (hatsunemiku1.jpg a hatsunemiku52.jpg) podem ser implementadas posteriormente.</p>
     </footer>
 
+    <!-- Elemento de Áudio -->
+    <audio id="playerAudio" loop>
+        <!-- A primeira fonte será definida via JavaScript -->
+    </audio>
+
     <script>
-        // Sistema de dados das 52 cartas
+        // ========== SISTEMA DE TEMAS ==========
+        const botoesTema = document.querySelectorAll('.btn-tema');
+        const body = document.body;
+
+        function ativarTema(nomeTema) {
+            body.className = nomeTema;
+            botoesTema.forEach(btn => btn.classList.remove('ativo'));
+            document.querySelector(`.btn-tema[data-tema="${nomeTema}"]`).classList.add('ativo');
+            localStorage.setItem('tema-oraculo-miku', nomeTema);
+        }
+
+        botoesTema.forEach(btn => {
+            btn.addEventListener('click', () => ativarTema(btn.dataset.tema));
+        });
+
+        // Carregar tema salvo
+        const temaSalvo = localStorage.getItem('tema-oraculo-miku') || 'pink';
+        ativarTema(temaSalvo);
+
+        // ========== PLAYER DE MÚSICA ==========
+        const playerAudio = document.getElementById('playerAudio');
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const btnProxima = document.getElementById('btnProxima');
+        const btnAnterior = document.getElementById('btnAnterior');
+        const nomeMusicaEl = document.getElementById('nomeMusica');
+
+        // Playlist de músicas (usando links de demonstração - substitua por seus arquivos)
+        const playlist = [
+            { nome: "Hatsune Miku - Senbonzakura", url: "https://files.catbox.moe/x8bivw.mp3" },
+            { nome: "Hatsune Miku - World is Mine", url: "https://files.catbox.moe/w33x3k.mp3" },
+            { nome: "Hatsune Miku - Romeo & Cinderella", url: "https://files.catbox.moe/jfkdk7.mp3" },
+            { nome: "Hatsune Miku - Melt", url: "https://files.catbox.moe/qyj2je.mp3" }
+        ];
+        let musicaAtualIndex = 0;
+
+        function carregarMusica(index) {
+            const musica = playlist[index];
+            playerAudio.src = musica.url;
+            nomeMusicaEl.textContent = musica.nome;
+            // Se já estava tocando, continua tocando a nova
+            const estavaTocando = !playerAudio.paused;
+            playerAudio.load();
+            if (estavaTocando) playerAudio.play().catch(e => console.log("Autoplay bloqueado:", e));
+        }
+
+        function togglePlayPause() {
+            if (playerAudio.paused) {
+                playerAudio.play();
+                btnPlayPause.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                playerAudio.pause();
+                btnPlayPause.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+
+        function proximaMusica() {
+            musicaAtualIndex = (musicaAtualIndex + 1) % playlist.length;
+            carregarMusica(musicaAtualIndex);
+        }
+
+        function musicaAnterior() {
+            musicaAtualIndex = (musicaAtualIndex - 1 + playlist.length) % playlist.length;
+            carregarMusica(musicaAtualIndex);
+        }
+
+        // Eventos
+        btnPlayPause.addEventListener('click', togglePlayPause);
+        btnProxima.addEventListener('click', proximaMusica);
+        btnAnterior.addEventListener('click', musicaAnterior);
+        playerAudio.addEventListener('play', () => btnPlayPause.innerHTML = '<i class="fas fa-pause"></i>');
+        playerAudio.addEventListener('pause', () => btnPlayPause.innerHTML = '<i class="fas fa-play"></i>');
+        playerAudio.addEventListener('ended', proximaMusica);
+
+        // Carregar primeira música
+        carregarMusica(musicaAtualIndex);
+        // Tocar automaticamente (pode ser bloqueado pelo navegador)
+        setTimeout(() => playerAudio.play().catch(e => console.log("Autoplay não permitido inicialmente.")), 500);
+
+        // ========== SISTEMA DO BARALHO E MODAL ==========
         const divinasMap = {
-            'copas': { nome: 'A Compositora (Copas)', corClasse: 'copas', icone: '♥', cor: '#ff6b9d' },
-            'ouros': { nome: 'A Idol (Ouros)', corClasse: 'ouros', icone: '♦', cor: '#ffcc00' },
-            'paus': { nome: 'A Pioneira (Paus)', corClasse: 'paus', icone: '♣', cor: '#6bcf7f' },
-            'espadas': { nome: 'A Programadora (Espadas)', corClasse: 'espadas', icone: '♠', cor: '#8a7cff' }
+            'copas': { nome: 'A Compositora (Copas)', corClasse: 'copas', icone: '♥' },
+            'ouros': { nome: 'A Idol (Ouros)', corClasse: 'ouros', icone: '♦' },
+            'paus': { nome: 'A Pioneira (Paus)', corClasse: 'paus', icone: '♣' },
+            'espadas': { nome: 'A Programadora (Espadas)', corClasse: 'espadas', icone: '♠' }
         };
 
         const acoesMap = {
-            1: { nome: 'O Início', desc: 'Novos começos, potencial puro, a centelha inicial.' },
-            2: { nome: 'União', desc: 'Diálogo, parceria, escolha, equilíbrio de forças.' },
-            3: { nome: 'Criação', desc: 'Expansão, crescimento, colaboração, primeiros resultados.' },
-            4: { nome: 'Estrutura', desc: 'Estabilidade, fundação, organização, pausa para construir.' },
-            5: { nome: 'Conflito', desc: 'Mudança, perda, desafio que leva ao crescimento.' },
-            6: { nome: 'Harmonia', desc: 'Cura, equilíbrio, reconciliação, fluxo natural.' },
-            7: { nome: 'Fé', desc: 'Reflexão, perseverança, confiança no processo, desafio interno.' },
-            8: { nome: 'Poder', desc: 'Movimento, ação, maestria, progresso tangível.' },
-            9: { nome: 'Realização', desc: 'Culminação, satisfação, sabedoria, quase no objetivo.' },
-            10: { nome: 'O Ciclo', desc: 'Completude, fechamento, herança, transição.' },
-            11: { nome: 'Valete', desc: 'O Mensageiro/Jovem Aprendiz. Novas energias, notícias, entusiasmo.' },
-            12: { nome: 'Dama', desc: 'A Mestra da Energia. Inteligência emocional, autonomia, realização.' },
-            13: { nome: 'Rei', desc: 'O Arquétipo Puro. Maestria, autoridade, visão, estrutura.' }
+            1: { nome: 'O Início', descCurta: 'Novos começos, potencial puro.', descLonga: 'Este é o momento de semear. A energia está fresca e cheia de possibilidades. Não espere perfeição, apenas comece. A Divina sussurra a primeira nota da sua música.' },
+            2: { nome: 'União', descCurta: 'Diálogo, parceria, equilíbrio.', descLonga: 'Duas forças se encontram. Pode ser uma colaboração criativa, um relacionamento ou o equilíbrio interno entre razão e emoção. Busque harmonia, não dominação.' },
+            3: { nome: 'Criação', descCurta: 'Expansão, crescimento, primeiros frutos.', descLonga: 'A ideia inicial ganha forma e volume. Colabore, compartilhe, deixe a energia se multiplicar. É um sinal de fertilidade e progresso visível.' },
+            4: { nome: 'Estrutura', descCurta: 'Estabilidade, fundação, organização.', descLonga: 'Hora de construir bases sólidas. Pode parecer uma pausa, mas é um trabalho profundo. Estabeleça rotinas, sistemas e limites saudáveis.' },
+            5: { nome: 'Conflito', descCurta: 'Mudança, perda, desafio necessário.', descLonga: 'Uma perturbação quebra a estagnação. Pode ser difícil, mas remove o que não serve mais. Aprenda com o desconforto, ele é seu professor.' },
+            6: { nome: 'Harmonia', descCurta: 'Cura, equilíbrio, reconciliação.', descLonga: 'Após a turbulência, a paz retorna. Cura emocional, resolução de conflitos e um fluxo natural de energia. Ajuda e generosidade são chaves.' },
+            7: { nome: 'Fé', descCurta: 'Reflexão, perseverança, desafio interno.', descLonga: 'Um momento de olhar para dentro e testar suas convicções. A vitória não é óbvia, mas sua persistência e fé no processo farão toda a diferença.' },
+            8: { nome: 'Poder', descCurta: 'Movimento, ação, maestria, progresso.', descLonga: 'Energia em movimento rápido e decisivo. Hora de aplicar suas habilidades, tomar as rédeas e ver progresso tangível. Movimente-se com propósito.' },
+            9: { nome: 'Realização', descCurta: 'Culminação, satisfação, sabedoria.', descLonga: 'Um ciclo chega ao seu ápice. Colha os frutos do seu trabalho e aprecie a vista. Há uma sensação de quase completude e profunda compreensão.' },
+            10: { nome: 'O Ciclo', descCurta: 'Completude, fechamento, transição.', descLonga: 'Um capítulo se encerra para que outro possa começar. É um momento de reflexão sobre a jornada e de passar adiante o conhecimento adquirido.' },
+            11: { nome: 'Valete', descCurta: 'Mensageiro, aprendiz, novas energias.', descLonga: 'Um mensageiro aparece. Pode ser uma notícia, uma nova ideia ou uma pessoa jovial. Traz entusiasmo e uma energia de curiosidade e aprendizado.' },
+            12: { nome: 'Dama', descCurta: 'Mestra, autonomia, inteligência emocional.', descLonga: 'A mestra do elemento. Ela personifica a realização através do domínio interno, da intuição e da ação independente. É um convite a empoderar-se.' },
+            13: { nome: 'Rei', descCurta: 'Arquétipo, autoridade, visão, estrutura.', descLonga: 'A expressão mais pura e madura do elemento. Representa maestria, controle consciente, visão estratégica e a habilidade de criar estruturas duradouras.' }
         };
 
-        // Gerar o baralho de 52 cartas (4 naipes x 13 cartas cada)
+        // Gerar o baralho
         const baralho = [];
         Object.keys(divinasMap).forEach(naipeKey => {
             for (let numero = 1; numero <= 13; numero++) {
@@ -419,7 +558,8 @@
                     divinaIcone: divina.icone,
                     corClasse: divina.corClasse,
                     acaoNome: acao.nome,
-                    acaoDesc: acao.desc,
+                    acaoDescCurta: acao.descCurta,
+                    acaoDescLonga: acao.descLonga,
                     nomeCompleto: `${acao.nome} de ${divina.nome.split(' ')[0]}`,
                     imgPlaceholder: `hatsunemiku${(Object.keys(divinasMap).indexOf(naipeKey) * 13) + numero}.jpg`
                 });
@@ -431,7 +571,6 @@
         const filtroNaipe = document.getElementById('filtroNaipe');
         const filtroNumero = document.getElementById('filtroNumero');
         const btnResetar = document.getElementById('btnResetarFiltros');
-        const detalhesCarta = document.getElementById('detalhesCarta');
 
         // Preencher o filtro de números
         for (let i = 1; i <= 13; i++) {
@@ -445,62 +584,95 @@
             filtroNumero.appendChild(opt);
         }
 
+        // Estado: carta expandida atualmente
+        let cartaExpandidaAtualId = null;
+
         // Função para renderizar cartas no baralho
         function renderizarCartas(cartasParaRenderizar) {
             baralhoContainer.innerHTML = '';
             cartasParaRenderizar.forEach(carta => {
-                const cartaEl = document.createElement('div');
-                cartaEl.className = 'carta';
-                cartaEl.dataset.id = carta.id;
-                cartaEl.dataset.naipe = carta.naipe;
-                cartaEl.dataset.numero = carta.numero;
-
-                const headerColorStyle = `border-bottom: 4px solid ${divinasMap[carta.naipe].cor};`;
-
-                cartaEl.innerHTML = `
-                    <div class="carta-cabecalho" style="${headerColorStyle}">
-                        <span>${carta.numero}</span>
-                        <div class="img-placeholder">
-                            ${carta.imgPlaceholder}<br>
-                            <small>(Clique para detalhes)</small>
-                        </div>
-                    </div>
-                    <div class="carta-corpo">
-                        <div class="naipe-icone ${carta.corClasse}">${carta.divinaIcone}</div>
-                        <div class="carta-titulo">${carta.acaoNome}</div>
-                        <div class="carta-desc">${carta.divinaNome}</div>
-                    </div>
-                `;
-                baralhoContainer.appendChild(cartaEl);
-
-                // Adicionar evento de clique para mostrar detalhes
-                cartaEl.addEventListener('click', () => mostrarDetalhesCarta(carta));
+                // Se esta é a carta que está expandida, renderize o modal
+                if (carta.id === cartaExpandidaAtualId) {
+                    renderizarCartaExpandida(carta);
+                } else {
+                    // Senão, renderize a carta normal
+                    renderizarCartaNormal(carta);
+                }
             });
         }
 
-        // Função para mostrar os detalhes de uma carta
-        function mostrarDetalhesCarta(carta) {
-            const divina = divinasMap[carta.naipe];
-            detalhesCarta.innerHTML = `
-                <div class="detalhes-cabecalho">
-                    <div class="detalhes-numero" style="background-color: ${divina.cor};">${carta.numero}</div>
-                    <div class="detalhes-info">
+        function renderizarCartaNormal(carta) {
+            const cartaEl = document.createElement('div');
+            cartaEl.className = 'carta';
+            cartaEl.dataset.id = carta.id;
+            cartaEl.dataset.naipe = carta.naipe;
+            cartaEl.dataset.numero = carta.numero;
+
+            // Obter a cor CSS atual para a borda
+            const corDivina = getComputedStyle(document.documentElement).getPropertyValue(`--cor-${carta.naipe}`).trim();
+
+            cartaEl.innerHTML = `
+                <div class="carta-cabecalho" style="border-bottom-color: ${corDivina};">
+                    <span>${carta.numero}</span>
+                    <div class="img-placeholder">
+                        ${carta.imgPlaceholder}<br>
+                        <small>(Clique para expandir)</small>
+                    </div>
+                </div>
+                <div class="carta-corpo">
+                    <div class="naipe-icone ${carta.corClasse}">${carta.divinaIcone}</div>
+                    <div class="carta-titulo">${carta.acaoNome}</div>
+                    <div class="carta-desc">${carta.divinaNome}</div>
+                </div>
+            `;
+            baralhoContainer.appendChild(cartaEl);
+
+            // Evento de clique para expandir
+            cartaEl.addEventListener('click', () => {
+                cartaExpandidaAtualId = carta.id;
+                filtrarCartas(); // Re-renderiza a grade, agora com a carta expandida
+            });
+        }
+
+        function renderizarCartaExpandida(carta) {
+            const expandidaEl = document.createElement('div');
+            expandidaEl.className = 'carta-expandida';
+            expandidaEl.dataset.id = carta.id;
+
+            const corDivina = getComputedStyle(document.documentElement).getPropertyValue(`--cor-${carta.naipe}`).trim();
+
+            expandidaEl.innerHTML = `
+                <button class="btn-fechar" aria-label="Fechar detalhes"><i class="fas fa-times"></i></button>
+                <div class="exp-cabecalho">
+                    <div class="exp-numero" style="background-color: ${corDivina};">${carta.numero}</div>
+                    <div class="exp-info">
                         <h3>${carta.nomeCompleto}</h3>
                         <div class="divina"><strong>Divina:</strong> ${carta.divinaNome} <span class="${carta.corClasse}">${carta.divinaIcone}</span></div>
                     </div>
                 </div>
-                <div class="detalhes-significado">
-                    <h4><i class="fas fa-comment-alt"></i> Significado da Ação neste Contexto</h4>
-                    <p>${carta.acaoDesc} dentro do domínio de <strong>${divina.nome.split('(')[0]}</strong>.</p>
-                    <p style="margin-top: 15px; padding: 15px; background: #f9f5ff; border-radius: 10px; border-left: 4px solid ${divina.cor};">
-                        <strong>Leitura Prática:</strong> Esta carta fala de <em>${carta.acaoNome.toLowerCase()}</em> nas áreas de <strong>${divina.nome.split(' ')[2] ? divina.nome.split(' ')[2].replace(')', '') : 'emoção'}</strong> e <strong>${divina.nome.split(' ')[3] ? divina.nome.split(' ')[3] : 'expressão'}</strong>. É um convite para vibrar na frequência desta divina digital.
-                    </p>
+                <div class="exp-corpo">
+                    <div class="exp-significado">
+                        <h4><i class="fas fa-bolt"></i> Significado Central</h4>
+                        <p>${carta.acaoDescCurta}</p>
+                    </div>
+                    <div class="exp-descricao">
+                        <h4><i class="fas fa-book-open"></i> Leitura Detalhada</h4>
+                        <p>${carta.acaoDescLonga} <strong>Esta energia se manifesta no domínio de ${carta.divinaNome.split('(')[0].trim()}</strong>, colorindo a situação com suas qualidades únicas.</p>
+                    </div>
+                    <div class="img-placeholder" style="height: 120px; border-style: solid;">
+                        <strong>Ilustração:</strong> ${carta.imgPlaceholder}
+                    </div>
                 </div>
             `;
-            detalhesCarta.style.borderTopColor = divina.cor;
-            detalhesCarta.classList.add('ativa');
-            // Rolar suavemente até os detalhes
-            detalhesCarta.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            baralhoContainer.appendChild(expandidaEl);
+
+            // Evento para fechar
+            const btnFechar = expandidaEl.querySelector('.btn-fechar');
+            btnFechar.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita que o clique propague para outros elementos
+                cartaExpandidaAtualId = null;
+                filtrarCartas(); // Re-renderiza a grade sem a expansão
+            });
         }
 
         // Função para filtrar as cartas
@@ -515,7 +687,6 @@
             });
 
             renderizarCartas(cartasFiltradas);
-            detalhesCarta.classList.remove('ativa'); // Esconde detalhes ao filtrar
         }
 
         // Event Listeners para filtros
@@ -524,18 +695,13 @@
         btnResetar.addEventListener('click', () => {
             filtroNaipe.value = 'todas';
             filtroNumero.value = 'todos';
+            cartaExpandidaAtualId = null; // Fecha qualquer carta expandida ao resetar
             renderizarCartas(baralho);
-            detalhesCarta.classList.remove('ativa');
         });
 
         // Inicialização: renderizar todas as cartas ao carregar
         window.addEventListener('DOMContentLoaded', () => {
             renderizarCartas(baralho);
-            // Mostrar uma carta inicial de exemplo (A Compositora de Copas)
-            setTimeout(() => {
-                const primeiraCarta = baralho.find(c => c.id === 'copas_1');
-                if (primeiraCarta) mostrarDetalhesCarta(primeiraCarta);
-            }, 500);
         });
     </script>
 </body>
